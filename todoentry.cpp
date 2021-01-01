@@ -4,10 +4,11 @@
 #include <utility>
 
 TodoEntry::TodoEntry() :
-    m_Name(),
+    m_Name("John Doe"),
     m_progress(0),
     m_details("Details")
 {
+    created++;
 }
 
 TodoEntry::TodoEntry(const TodoEntry & todoEntry) :
@@ -15,6 +16,7 @@ TodoEntry::TodoEntry(const TodoEntry & todoEntry) :
     m_progress( std::move(todoEntry.m_progress)),
     m_details(  std::move(todoEntry.m_details))
 {
+    copied++;
 }
 
 TodoEntry::TodoEntry(TodoEntry &&rhs) :
@@ -22,7 +24,8 @@ TodoEntry::TodoEntry(TodoEntry &&rhs) :
     m_progress( std::move(rhs.m_progress)),
     m_details(  std::move(rhs.m_details))
 {
-    m_progress = 0;
+    rhs.m_progress = 0;
+    moved++;
 }
 
 TodoEntry & TodoEntry::operator=(const TodoEntry &rhs) {
@@ -59,19 +62,19 @@ std::string TodoEntry::getDetails() const {
 }
 
 // setters
-TodoEntry & TodoEntry::setProgress(int progress){
+TodoEntry && TodoEntry::setProgress(int progress){
     this->m_progress = progress;
-    return * this;
+    return std::move(* this);
 }
 
-TodoEntry & TodoEntry::setName(std::string name){
+TodoEntry && TodoEntry::setName(std::string name){
     this->m_Name = name;
-    return * this;
+    return std::move(* this);
 }
 
-TodoEntry & TodoEntry::setDetails(std::string details){
+TodoEntry && TodoEntry::setDetails(std::string details){
     this->m_details = details;
-    return * this;
+    return std::move(* this);
 }
 
 std::ostream & operator<<(std::ostream &os, const TodoEntry & te) {

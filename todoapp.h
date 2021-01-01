@@ -33,6 +33,10 @@ class TodoApp : public Gtk::Window {
         Gtk::Menu subMenuFile;
         Gtk::MenuItem menuFileOpen, menuFileClose;
 
+        Gtk::MenuItem menuTodo;
+        Gtk::Menu subMenuTodo;
+        Gtk::MenuItem menuTodoAdd, menuTodoDelete;
+
         // ======================
         // Functions
         // ======================

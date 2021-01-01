@@ -1,30 +1,46 @@
 #include "todo.h"
 #include "todoentry.h"
 #include <iostream>
+#include <optional>
+#include <utility>
+
+int TodoEntry::created = 0;
+int TodoEntry::copied = 0;
+int TodoEntry::moved = 0;
 
 int main() {
+
     Todo t;
     std::cout << t.getCount() << "\n";
+    std::cout << "==========\n";
+
     TodoEntry te;
-    te.setName("Horst").setProgress(10)
-        .setDetails("HungaBunga").setProgress(-1).setProgress(10);
+    te.setDetails("SECRET").setProgress(10)
+        .setName("Some Name1").setProgress(-1).setProgress(10);
+    std::cout << "==========\n";
+    te.setProgress(100);
+
     t.insertTodo(std::move(te));
-    t.insertTodo(std::move(TodoEntry().setName("Walther").setProgress(50)));
+
+    std::cout << "==========\n";
+    TodoEntry te1;
+    te1.setName("Some Oather Name 1").setProgress(100).setDetails("Ich bin geheim!");
+    t.insertTodo(std::move(te1));
+    std::cout << "==========\n";
+
+    if( auto x = t.getTodo(1)) {
+        t.updateTodo(1,x.value().setName("Other Name 1").setProgress(50));
+        t.insertTodo(TodoEntry().setName("Some Name 1").setDetails("Koch"));
+    }
+
+    std::cout << "==========\n";
+
     std::cout << t.getCount() << "\n";
-    if(auto x = t.getTodo(0)) {
-        std::cout << x->getName() << "\n";
-    }
-    if(auto x = t.getTodo(1)) {
-        std::cout << x->getName() << "\n";
-    }
-    t.updateTodo(1, TodoEntry(t.getTodo(1).value()).setName("Florian"));
-    if(auto x = t.getTodo(1)) {
-        std::cout << x->getName() << "\n";
-    }
-    std::cout << te;
-    te.setName("asdiushadfioahsdf").setDetails("huhuhuhuh");
-    std::cout << te;
-    t.insertTodo(std::move(te));
-    te.setProgress(-1);
-    std::cout << te;
+    t.printAll();
+
+
+    std::cout << "==========\n";
+    std::cout << "Created: " << TodoEntry::created << "\n";
+    std::cout << "Copied: " << TodoEntry::copied << "\n";
+    std::cout << "Moved: " << TodoEntry::moved << "\n";
 }

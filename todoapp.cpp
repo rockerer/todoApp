@@ -13,7 +13,9 @@
 TodoApp::TodoApp() :
     m_btn_exit("Huhu!!!")
 {
+    // ======================
     // set up the application window
+    // ======================
     set_title("Todo-Application");
     set_border_width(10);
     set_default_size(600, 800);
@@ -22,7 +24,11 @@ TodoApp::TodoApp() :
     // needed for menu and body
     add(mainLayout);
 
+    // ======================
     // build menu
+    // ======================
+
+
     mainLayout.pack_start(menuBar, Gtk::PackOptions::PACK_SHRINK);
 
     // append submenu file
@@ -32,7 +38,7 @@ TodoApp::TodoApp() :
 
     menuFileOpen.set_label("Open");
     menuFileOpen.signal_activate().connect( [] {
-            std::cout << "Open\n";});
+            std::cout << "Open: Implement me!\n";});
     subMenuFile.append(menuFileOpen);
 
     menuFileClose.set_label("Close");
@@ -40,6 +46,26 @@ TodoApp::TodoApp() :
 //            sigc::ptr_fun(&Gtk::Main::quit));
             sigc::mem_fun(*this, &TodoApp::quit));
     subMenuFile.append(menuFileClose);
+
+
+    // append another submenu
+    menuTodo.set_label("Tdo");
+    menuTodo.set_submenu(subMenuTodo);
+    menuBar.append(menuTodo);
+
+    menuTodoAdd.set_label("Create New Todo");
+    menuTodoAdd.signal_activate().connect(
+            [] {
+                std::cout << "Creating new Todo\n";
+            });
+    subMenuTodo.append(menuTodoAdd);
+
+    menuTodoDelete.set_label("Delete Todo");
+    menuTodoDelete.signal_activate().connect(
+            [] {
+                std::cout << "Deleting Todo\n";
+            });
+    subMenuTodo.append(menuTodoDelete);
 
     menuBar.show_all();
 

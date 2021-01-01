@@ -18,9 +18,12 @@ class TodoEntry {
         std::string getName() const;
         std::string getDetails() const;
 
-        TodoEntry & setProgress(int);
-        TodoEntry & setName(std::string);
-        TodoEntry & setDetails(std::string);
+        TodoEntry && setProgress(int);
+        TodoEntry && setName(std::string);
+        TodoEntry && setDetails(std::string);
+
+        // for debugging purposes:
+        static int created, copied, moved;
 
         friend std::ostream & operator<<(std::ostream &os, const TodoEntry & te);
 
@@ -28,4 +31,5 @@ class TodoEntry {
         std::string m_Name;
         int m_progress;
         std::string m_details;
+
 };

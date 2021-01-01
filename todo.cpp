@@ -1,10 +1,13 @@
 #include "todo.h"
+#include "todoentry.h"
 #include <list>
 #include <optional>
 #include <iostream>
+#include <utility>
 
 Todo::Todo() {
 //    std::cout << "New TodoList created\n";
+    this->m_vec_todo.reserve(10);
 }
 
 Todo::~Todo() {
@@ -13,21 +16,27 @@ Todo::~Todo() {
 
 // check, if this makes problems with 
 // loosing the original object
-void Todo::insertTodo(TodoEntry && todoEntry){
-    this->m_vec_todo.push_back(std::move(todoEntry));
+void Todo::insertTodo(TodoEntry &&todoEntry){
+    this->m_vec_todo.push_back(
+            std::forward<TodoEntry>(todoEntry)
+    );
 }
 
-std::optional<const TodoEntry> Todo::getTodo(int index){
+std::optional<TodoEntry> Todo::getTodo(int index){
     if(index < static_cast<int>(this->m_vec_todo.size())) {
-        return this->m_vec_todo.at(index);
+        return std::optional(this->m_vec_todo.at(index));
     }
     return std::nullopt;
 }
 
-void Todo::updateTodo(int index, TodoEntry newTodoEntry){
+void Todo::updateTodo(int index, TodoEntry &&newTodoEntry){
     if(index < static_cast<int>(this->m_vec_todo.size())) {
         this->deleteTodo(index);
+        this->m_vec_todo.emplace(
+               this->m_vec_todo.begin() + index, std::forward<TodoEntry>(newTodoEntry));
+        /*
         this->m_vec_todo.insert(this->m_vec_todo.begin() + index, newTodoEntry);
+        */
     }
 }
 void Todo::deleteTodo(int index){
@@ -39,4 +48,10 @@ void Todo::deleteTodo(int index){
 
 int Todo::getCount() {
     return this->m_vec_todo.size();
+}
+
+void Todo::printAll() {
+    for(auto &x: m_vec_todo) {
+        std::cout << x << "\n";
+    }
 }

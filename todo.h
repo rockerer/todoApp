@@ -11,11 +11,13 @@ class Todo{
         virtual ~Todo();
 
         void insertTodo(TodoEntry &&);
-        std::optional<const TodoEntry> getTodo(int);
-        void updateTodo(int, TodoEntry);
+        std::optional<TodoEntry> getTodo(int);
+        void updateTodo(int, TodoEntry &&);
         void deleteTodo(int);
 
         int getCount();
+
+        void printAll();
 
         // ggf. noch search
         // aber das kommt spaeter
